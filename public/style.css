@@ -108,6 +108,11 @@ h1 {
     border-radius: 2rem;
     padding: 2rem;
     box-shadow: var(--glass-shadow);
+    margin-bottom: 3rem;
+}
+
+.secondary-chart {
+    margin-top: 2rem;
 }
 
 .chart-header {

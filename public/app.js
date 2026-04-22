@@ -10,6 +10,7 @@ let currentLimit = 30;
 async function init() {
     await loadReservoirs();
     setupEventListeners();
+    loadComparativeData();
     
     // Load first reservoir by default
     if (selector.options.length > 1) {
@@ -160,6 +161,83 @@ function renderChart(data) {
                     title: { display: true, text: 'Volum (hm³)', color: '#a0aec0' },
                     ticks: { color: '#718096' },
                     grid: { drawOnChartArea: false }
+                }
+            }
+        }
+    });
+}
+
+async function loadComparativeData() {
+    try {
+        const res = await fetch('/api/comparativa');
+        const data = await res.json();
+        renderComparativeChart(data);
+    } catch (err) {
+        console.error('Error loading comparative data:', err);
+    }
+}
+
+function renderComparativeChart(data) {
+    const ctx = document.getElementById('comparativeChart').getContext('2d');
+    
+    const colors = [
+        '#00d4ff', '#ff4d4d', '#ffaa00', '#00ff88', 
+        '#bd93f9', '#ff79c6', '#8be9fd', '#50fa7b', '#f1fa8c'
+    ];
+
+    // Get all unique dates for X axis
+    const allDates = [...new Set(Object.values(data).flatMap(d => d.map(r => r.fecha)))].sort();
+
+    const datasets = Object.keys(data).map((name, index) => {
+        // Map data to the global timeline (fill gaps with null if necessary)
+        const timelineData = allDates.map(date => {
+            const match = data[name].find(r => r.fecha === date);
+            return match ? match.pct : null;
+        });
+
+        return {
+            label: name,
+            data: timelineData,
+            borderColor: colors[index % colors.length],
+            borderWidth: 2,
+            pointRadius: 0,
+            fill: false,
+            tension: 0.3
+        };
+    });
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: allDates,
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: { 
+                        color: '#a0aec0', 
+                        font: { size: 10, family: 'Inter' },
+                        boxWidth: 10,
+                        padding: 15
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: { color: '#718096', maxTicksLimit: 12 },
+                    grid: { display: false }
+                },
+                y: {
+                    min: 0,
+                    max: 100,
+                    ticks: { color: '#718096' },
+                    grid: { color: 'rgba(255,255,255,0.05)' },
+                    title: { display: true, text: '% Llenado', color: '#a0aec0' }
                 }
             }
         }
