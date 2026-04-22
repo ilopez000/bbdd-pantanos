@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embalses de Catalunya | Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Estat dels Embassaments</h1>
+            <p class="subtitle">Conques Internes de Catalunya</p>
+        </header>
+
+        <section id="stats-summary" class="stats-grid">
+            <!-- Cards will be injected here -->
+            <div class="loading">Carregant dades...</div>
+        </section>
+
+        <main class="chart-section">
+            <div class="chart-header">
+                <h2>Evolució Històrica</h2>
+                <div class="controls">
+                    <select id="embalse-selector">
+                        <option value="">Selecciona un embassament</option>
+                    </select>
+                    <div class="time-filters">
+                        <button class="filter-btn active" data-limit="30">1M</button>
+                        <button class="filter-btn" data-limit="180">6M</button>
+                        <button class="filter-btn" data-limit="365">1A</button>
+                        <button class="filter-btn" data-limit="1825">5A</button>
+                    </div>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="mainChart"></canvas>
+            </div>
+        </main>
+
+        <footer>
+            <p>Dades de la Generalitat de Catalunya | Creat per Antigravity</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

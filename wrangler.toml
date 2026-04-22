@@ -1,0 +1,7 @@
+name = "web-pantanos"
+pages_build_output_dir = "public"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "bbdd-pantanos"
+database_id = "2529357b-dd32-4116-81d3-591e926da0e3"
